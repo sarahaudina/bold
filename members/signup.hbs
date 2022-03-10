@@ -53,38 +53,42 @@
         <h1 class="checkout-title">Choose your subscription</h1>
         <p>Unlock full access to {{@site.title}} and see the entire library of members-only content & updates</p>
         <div class="checkout-box">
-            <div class="checkout-plan">
-                <header class="checkout-plan-header">
-                    <h3>Monthly</h3>
-                    <span>{{@price.currency}}</span><strong>{{@price.monthly}}</strong> / month
-                </header>
-                <div class="checkout-plan-content">
-                    <ul>
-                        <li>Full access to all private posts</li>
-                        <li>Regular updates with new content</li>
-                        <li>Support independent publishing</li>
-                        <li>Simple, secure card payment</li>
-                    </ul>
-                    <a class="button primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button">
-                        Choose this plan</a>
+
+            {{#foreach @products as |product|}}
+                <div class="checkout-plan">
+                    <header class="checkout-plan-header">
+                        <h3>{{product.name}}</h3>
+                            {{#if @product.monthly_price}}
+                                <strong>{{price product.monthly_price}}</strong> / month
+                            {{/if}}
+                            {{#if @product.yearly_price}}
+                                Or <strong>{{price product.yearly_price}}</strong> / year
+                            {{/if}}
+                    </header>
+                    <div class="checkout-plan-content">
+                        {{#if @product.description}}
+                            {{product.description}}
+                        {{/if}}
+
+                        {{#if @product.benefits}}
+                            <ul>
+                            {{#foreach @product.benefits as |benefit|}}
+                                <li>{{benefit.name}}</li>
+                            {{/foreach}}
+                            </ul>
+                        {{/if}}
+                        
+                        {{!-- <ul>
+                            <li>Full access to all private posts</li>
+                            <li>Regular updates with new content</li>
+                            <li>Support independent publishing</li>
+                            <li>Simple, secure card payment</li>
+                        </ul> --}}
+                        <a class="button primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button">
+                            Choose this plan</a>
+                    </div>
                 </div>
-            </div>
-            <div class="checkout-plan">
-                <header class="checkout-plan-header">
-                    <h3>Yearly</h3>
-                    <span>{{@price.currency}}</span><strong>{{@price.yearly}}</strong> / year
-                </header>
-                <div class="checkout-plan-content">
-                    <ul>
-                        <li>Full access to all private posts</li>
-                        <li>Regular updates with new content</li>
-                        <li>Support independent publishing</li>
-                        <li>Simple, secure card payment</li>
-                        <li>One easy payment instead of 12!</li>
-                    </ul>
-                    <a class="button primary fit" href="javascript:" data-members-plan="Yearly">Choose this plan</a>
-                </div>
-            </div>
+            {{/foreach}}
         </div>
     </div>
 
