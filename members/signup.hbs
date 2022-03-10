@@ -87,7 +87,9 @@
                             {{#match @product.name "=" "CUSTOM"}}
                                 <div class="input-group row">
                                     <input type="button" value="-" class="button-minus" data-field="quantity">
+                                    <div class="checkout-currency">$</div>
                                     <input type="number" step="1" max="" value="1" name="quantity" class="quantity-field">
+                                    / month
                                     <input type="button" value="+" class="button-plus" data-field="quantity">
                                 </div>
                             {{else}}

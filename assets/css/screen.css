@@ -740,6 +740,12 @@ h6 {
     font-weight: 500;
 }
 
+.checkout-currency {
+    color: var(--darkgrey);
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
 .checkout-plan-content {
     flex: 1 1 auto;
     display: flex;
@@ -1164,7 +1170,7 @@ input::-webkit-inner-spin-button {
   text-align: center;
   width: 62px;
   display: inline-block;
-  font-size: 13px;
+  font-size: 2rem;
   margin: 0 0 5px;
   resize: vertical;
 }
