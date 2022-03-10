@@ -67,7 +67,6 @@
             <label for="input-email" class="gh-portal-input-label"> Email </label>
         </div>
         <input id="input-email" class="gh-portal-input" type="email" name="email" placeholder="jamie@example.com" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Email" value="">
-    
 
         <div class="row" style="margin-bottom: 32px;">
             <span>MONTHLY</span>
@@ -82,14 +81,15 @@
             {{#foreach @products as |product|}}
                 {{#if @product.monthly_price}}
                     <div class="checkout-plan">
+                        <input name="plan" class="radio" type="radio" checked>
                         <header class="checkout-plan-header">
                             <h3>{{product.name}}</h3>
                             {{#match @product.name "=" "CUSTOM"}}
-                                <div class="row">
-                                    <span class="minus">-</span>
-                                    <input type="text" value="1"/>
-                                    <span class="plus">+</span>
-                                </div> 
+                                <div class="input-group row">
+                                    <input type="button" value="-" class="button-minus" data-field="quantity">
+                                    <input type="number" step="1" max="" value="1" name="quantity" class="quantity-field">
+                                    <input type="button" value="+" class="button-plus" data-field="quantity">
+                                </div>
                             {{else}}
                                 <span>{{@price.currency}}</span><strong>{{@price.monthly}}</strong> / month
                             {{/match}}
@@ -108,13 +108,15 @@
                                 {{/foreach}}
                                 </ul>
                             {{/if}}
-                            <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button">
-                                Choose this plan</a>
                         </div>
+                        </input>
                     </div>
+
                 {{/if}}
             {{/foreach}}
         </div>
+        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button">
+                Choose this plan</a>
     </div>
 
 
