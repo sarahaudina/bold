@@ -1,5 +1,11 @@
+{{!< ../default}}
+
 <main id="site-main" class="site-main site-signup outer">
 <div class="inner">
+
+
+{{!-- Custom Styles --}}
+<link rel="stylesheet" href="{{asset "css/screen.css"}}">
 
 {{#if @member.paid}}
 
@@ -49,45 +55,54 @@
 
 {{else}}
 
-        <div class="checkout-form">
+    <div class="checkout-form">
         <h1 class="checkout-title">Choose your subscription</h1>
         <p>Unlock full access to {{@site.title}} and see the entire library of members-only content & updates</p>
+
+        <div class="row" style="margin-bottom: 32px;">
+            <span>MONTHLY</span>
+            <label class="price-switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <span>YEARLY</span>
+        </div>
+
         <div class="checkout-box">
-
             {{#foreach @products as |product|}}
-                <div class="checkout-plan">
-                    <header class="checkout-plan-header">
-                        <h3>{{product.name}}</h3>
-                            {{#if @product.monthly_price}}
-                                <strong>{{price product.monthly_price}}</strong> / month
-                            {{/if}}
-                            {{#if @product.yearly_price}}
-                                Or <strong>{{price product.yearly_price}}</strong> / year
-                            {{/if}}
-                    </header>
-                    <div class="checkout-plan-content">
-                        {{#if @product.description}}
-                            {{product.description}}
-                        {{/if}}
+                {{#if @product.monthly_price}}
+                    <div class="checkout-plan">
+                        <header class="checkout-plan-header">
+                            <h3>{{product.name}}</h3>
+                            {{#match @product.name "=" "CUSTOM"}}
+                                <div class="row">
+                                    <span class="minus">-</span>
+                                    <input type="text" value="1"/>
+                                    <span class="plus">+</span>
+                                </div> 
+                            {{else}}
+                                <span>{{@price.currency}}</span><strong>{{@price.monthly}}</strong> / month
+                            {{/match}}
+                        </header>
+                        <div class="checkout-plan-content">
+                            <header class="checkout-plan-header">
+                                {{#if @product.description}}
+                                    <span>{{product.description}}</span>
+                                {{/if}}
+                            </header>
 
-                        {{#if @product.benefits}}
-                            <ul>
-                            {{#foreach @product.benefits as |benefit|}}
-                                <li>{{benefit.name}}</li>
-                            {{/foreach}}
-                            </ul>
-                        {{/if}}
-                        
-                        {{!-- <ul>
-                            <li>Full access to all private posts</li>
-                            <li>Regular updates with new content</li>
-                            <li>Support independent publishing</li>
-                            <li>Simple, secure card payment</li>
-                        </ul> --}}
-                        <a class="button primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button">
-                            Choose this plan</a>
+                            {{#if @product.benefits}}
+                                <ul>
+                                {{#foreach @product.benefits as |benefit|}}
+                                    <li>{{benefit.name}}</li>
+                                {{/foreach}}
+                                </ul>
+                            {{/if}}
+                            <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button">
+                                Choose this plan</a>
+                        </div>
                     </div>
-                </div>
+                {{/if}}
             {{/foreach}}
         </div>
     </div>
@@ -102,6 +117,12 @@
 {{#contentFor "scripts"}}
 <script>
 $(document).ready(function () {
+
+    $("#price-switch").change(function() {
+
+    });
+
+
 
     $("#pay-button").click(function () {
         // document.getElementById("error").innerHTML = ""
