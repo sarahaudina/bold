@@ -3,7 +3,6 @@
 <main id="site-main" class="site-main site-signup outer">
 <div class="inner">
 
-
 {{!-- Custom Styles --}}
 <link rel="stylesheet" href="{{asset "css/screen.css"}}">
 
@@ -82,7 +81,7 @@
             {{#foreach @products as |product|}}
                 {{#if @product.monthly_price}}
                     <label class="checkout-plan">
-                        <input name="plan" class="radio" type="radio" checked>
+                        <input name="plan" class="radio" type="radio" checked yearly="{{@price.yearly}}" monthly="{{@price.monthly}}" product-name="{{@product.name}}" currency="{{@price.currency}}">
                             <span class="plan-details">
 
                         <header class="checkout-plan-header">
@@ -97,7 +96,7 @@
                                 </div>
                             {{else}}
                                 <span>{{@price.currency}}</span>
-                                <strong class="price-label" id="{{product.id}}" yearly="{{@price.yearly}}" monthly="{{@price.monthly}}" promo="{{product.discount}}">
+                                <strong class="price-label" yearly="{{@price.yearly}}" monthly="{{@price.monthly}}">
                                     {{@price.monthly}}</strong> / month
                             {{/match}}
                         </header>
@@ -123,7 +122,7 @@
                 {{/if}}
             {{/foreach}}
         </div>
-        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button" style="margin-top: 32px;">
+        <a class="button rounded primary fit" id="pay-button" style="margin-top: 32px;">
             <span class="button__text">
                 Choose this plan
             </span>
@@ -159,25 +158,45 @@
     }
     
     $("#pay-button").click(function () {
+        const products = {
+            BRONZE:'prod_LI5KWFhhbuUsGS',
+            GOLD:'',
+            CUSTOM:'prod_LI5JQhpeWGCNDZ'
+        };
+
+        // reset error
         document.getElementById("error").innerHTML = ""
+
+        // get values
+        var radios = document.getElementsByClassName("radio");
+        let selected_product;
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) {
+                selected_product = radios.item(i);
+            }
+        }
+        var product_name = selected_product.getAttribute("product-name");
+        console.log(product_name);
+
         var plan = document.getElementById("yearly-checkbox").checked ? "yearly" : "monthly";
-        var price = document.getElementById("custom-price").value;
+        var price = product_name==='Custom' ? document.getElementById("custom-price").value 
+            : plan==="yearly" ? selected_product.getAttribute("yearly") : selected_product.getAttribute("monthly");
         var name = document.getElementById("input-name").value;
         var email = document.getElementById("input-email").value;
-        var currencyCode = "USD";
+        var product_id = products[product_name];
+        var currencyCode = selected_product.getAttribute("currency");
+        var successUrl = "http://localhost:2368/";
+        var cancelUrl = "http://localhost:2368/";
 
         // no email or no price : ask user to fill all
         if (!email || !price) {
             document.getElementById("error").innerHTML = "Please fill in all the fields";
             return;
         }
-        if (!(parseInt(price) >= 4)) {
-            document.getElementById("error").innerHTML = "Please fill in a minimum price ";
-            return;
-        }
 
         // show loading then send request to access stripe
         document.getElementById("pay-button").classList.toggle('button--loading');
+        console.log(JSON.stringify({ price, email, plan, currencyCode, product_id, successUrl, cancelUrl }));
 
         fetch("https://pay-as-you-like-gh.herokuapp.com/api/get-stripe-session", {
                 method: "POST",
@@ -185,7 +204,7 @@
                     "Content-Type": "application/json",
                     "Accept": "*/*"
                 },
-                body: JSON.stringify({ price, email, plan, currencyCode }),
+                body: JSON.stringify({ price, email, plan, currencyCode, product_id, successUrl, cancelUrl }),
             }).then(function (result) {
                 document.getElementById("pay-button").classList.toggle('button--loading');
                 console.log(result);
