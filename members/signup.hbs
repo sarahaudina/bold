@@ -21,7 +21,7 @@
             <div class="checkout-plan">
                 <header class="checkout-plan-header">
                     <h3>Monthly</h3>
-                    <span>{{@price.currency}}</span><strong>{{@price.monthly}}</strong> <span class="plan-label">/ month</span>
+                    <span>{{@price.currency}}</span><strong>{{price @product.monthly_price}}</strong> <span class="plan-label">/ month</span>
                 </header>
                 <div class="checkout-plan-content">
                     <ul>
@@ -80,7 +80,7 @@
             {{#foreach @products as |product|}}
                 {{#if @product.monthly_price}}
                     <label class="checkout-plan">
-                        <input name="plan" class="radio" type="radio" checked yearly="{{@price.yearly}}" monthly="{{@price.monthly}}" product-name="{{@product.name}}" currency="{{@price.currency}}">
+                        <input name="plan" class="radio" type="radio" checked yearly="{{price @product.yearly_price.amount}}" monthly="{{price @product.monthly_price.amount}}" product-name="{{@product.name}}" currency="{{@price.currency}}">
                             <span class="plan-details">
 
                         <header class="checkout-plan-header" style="padding-top:50px;">
@@ -89,15 +89,15 @@
                                 <div class="input-group row">
                                     <input type="button" value="-" class="button-minus" data-field="quantity" style="background:#fff;">
                                     <div class="checkout-currency" style="align-self: center;">$</div>
-                                    <input id="custom-price" type="number" step="1" max="" min="{{@price.monthly}}" value="{{@price.monthly}}" name="quantity" class="quantity-field">
+                                    <input id="custom-price" type="number" step="1" max="" value="{{price @product.monthly_price.amount}}" name="quantity" class="quantity-field">
                                     <span class="plan-label" style="font-size: 20px; align-self: center;">/ month</span>
                                     <input type="button" value="+" class="button-plus" data-field="quantity" style="background:#fff;">
                                 </div>
                             {{else}}
                                 <div class="row">
                                 <div class="checkout-currency">$</div>
-                                <strong class="price-label" yearly="{{@price.yearly}}" monthly="{{@price.monthly}}">
-                                    {{@price.monthly}}</strong> <span class="plan-label" style="font-size: 20px;">/ month</span>
+                                <strong class="price-label" yearly="{{price @product.yearly_price.amount}}" monthly="{{price @product.monthly_price.amount}}">
+                                    {{price @product.monthly_price.amount}}</strong> <span class="plan-label" style="font-size: 20px;">/ month</span>
                                 </div>
                             {{/match}}
                         </header>
@@ -189,6 +189,7 @@
             GOLD:'',
             CUSTOM:'prod_LI5JQhpeWGCNDZ'
         };
+        const stripePrivateKey="sk_test_51KYmQ1AvRMHFv37pvJZu5mAjnIkk8hNW2SUEpcDGlnAyDLQ7161GMVIgZBTEtsCxvOAgIxqpFDEctUE0BF1YJ3jl00dIyyknKT";
         // reset error
         document.getElementById("error").innerHTML = ""
         // get values
@@ -199,17 +200,17 @@
                 selected_product = radios.item(i);
             }
         }
-        var product_name = selected_product.getAttribute("product-name");
+        var productName = selected_product.getAttribute("product-name");
         var plan = document.getElementById("yearly-checkbox").checked ? "yearly" : "monthly";
         var price = plan==="yearly" ? selected_product.getAttribute("yearly") : selected_product.getAttribute("monthly");
         var name = document.getElementById("input-name").value;
         var email = document.getElementById("input-email").value;
-        var product_id = products[product_name];
+        var product_id = products[productName];
         var currencyCode = selected_product.getAttribute("currency");
         var successUrl = "http://localhost:2368/";
         var cancelUrl = "http://localhost:2368/";
         // check if value lower than minimal
-        if (product_name==='CUSTOM') {
+        if (productName==='CUSTOM') {
             var custom_price = document.getElementById("custom-price").value;
             if (custom_price<price) {
                 document.getElementById("error").innerHTML = "Value can't be lower than $" + price + " :)";
@@ -233,7 +234,7 @@
                     "Content-Type": "application/json",
                     "Accept": "*/*"
                 },
-                body: JSON.stringify({ price, email, plan, currencyCode, product_id, successUrl, cancelUrl }),
+                body: JSON.stringify({ price, email, plan, currencyCode, product_id, successUrl, cancelUrl, productName, stripePrivateKey }),
             }).then(function (result) {
                 document.getElementById("pay-button").classList.toggle('button--loading');
                 console.log(result);
