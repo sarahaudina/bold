@@ -787,7 +787,7 @@ h6 {
 
 .checkout-currency {
     color: var(--darkgrey);
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: 500;
 }
 
@@ -839,7 +839,7 @@ h6 {
 
 .checkout-form {
     margin: 0 auto 10vw;
-    max-width: 700px;
+    max-width: 900px;
     width: 100%;
     text-align: center;
 }
@@ -861,7 +861,7 @@ h6 {
 
 .checkout-box {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: stretch;
 }
 
@@ -897,9 +897,9 @@ h6 {
     margin:100px;
 }
 .custom-price.minus, .plus{
-    width:20px;
-    height:20px;
-    background:#f2f2f2;
+    width:16px;
+    height:16px;
+    background:#fff;
     border-radius:4px;
     padding:8px 5px 8px 5px;
     border:1px solid #ddd;
@@ -1017,7 +1017,7 @@ input:checked + .slider:before {
     vertical-align: center;
     display: flex;
     justify-content: center;
-    max-width: 700px;
+    /* max-width: 700px; */
     width: 100%;
 }
 
@@ -1041,6 +1041,7 @@ input:checked + .slider:before {
 }
 
 .checkout-plan {
+    max-width: 300px;
     cursor: pointer;
     flex: 1 1 auto;
     display: flex;
@@ -1175,10 +1176,17 @@ input::-webkit-inner-spin-button {
   width: 100px;
   height: 54px;
   font-size: 4.5rem;
+  font-weight: 500;
+  color: #000;
 }
 
 input[type="number"] {
   -moz-appearance: textfield;
   -webkit-appearance: none;
+}
+
+/* Pricing labels */
+.plan-label {
+    color: #000;
 }
 
