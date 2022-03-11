@@ -212,7 +212,7 @@
         if (product_name==='CUSTOM') {
             var custom_price = document.getElementById("custom-price").value;
             if (custom_price<price) {
-                document.getElementById("error").innerHTML = "Please value can't be lower than $" + price + " :)";
+                document.getElementById("error").innerHTML = "Value can't be lower than $" + price + " :)";
                 return;
             } else {
                 price = custom_price;
