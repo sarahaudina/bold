@@ -183,12 +183,7 @@
     }
     
     $("#pay-button").click(function () {
-        // features works only with these following hardcoded products
-        const products = {
-            BRONZE:'prod_LI5KWFhhbuUsGS',
-            GOLD:'',
-            CUSTOM:'prod_LI5JQhpeWGCNDZ'
-        };
+        // features works only with this following stripe account
         const stripePrivateKey="sk_test_51KYmQ1AvRMHFv37pvJZu5mAjnIkk8hNW2SUEpcDGlnAyDLQ7161GMVIgZBTEtsCxvOAgIxqpFDEctUE0BF1YJ3jl00dIyyknKT";
         // reset error
         document.getElementById("error").innerHTML = ""
@@ -205,10 +200,9 @@
         var price = plan==="yearly" ? selected_product.getAttribute("yearly") : selected_product.getAttribute("monthly");
         var name = document.getElementById("input-name").value;
         var email = document.getElementById("input-email").value;
-        var product_id = products[productName];
         var currencyCode = selected_product.getAttribute("currency");
-        var successUrl = "http://localhost:2368/";
-        var cancelUrl = "http://localhost:2368/";
+        var successUrl = "/";
+        var cancelUrl = "/";
         // check if value lower than minimal
         if (productName==='CUSTOM') {
             var custom_price = document.getElementById("custom-price").value;
@@ -226,7 +220,7 @@
         }
         // show loading then send request to access stripe
         document.getElementById("pay-button").classList.toggle('button--loading');
-        console.log(JSON.stringify({ price, email, plan, currencyCode, product_id, successUrl, cancelUrl }));
+        // console.log(JSON.stringify({ price, email, plan, currencyCode, successUrl, cancelUrl }));
 
         fetch("https://pay-as-you-like-gh.herokuapp.com/api/get-stripe-session", {
                 method: "POST",
@@ -234,7 +228,7 @@
                     "Content-Type": "application/json",
                     "Accept": "*/*"
                 },
-                body: JSON.stringify({ price, email, plan, currencyCode, product_id, successUrl, cancelUrl, productName, stripePrivateKey }),
+                body: JSON.stringify({ price, email, plan, currencyCode, successUrl, cancelUrl, productName, stripePrivateKey }),
             }).then(function (result) {
                 document.getElementById("pay-button").classList.toggle('button--loading');
                 console.log(result);
