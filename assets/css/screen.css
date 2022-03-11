@@ -986,7 +986,7 @@ h6 {
     height: 21px;
     width: 21px;
     left: 4px;
-    bottom: 4px;
+    top: 2px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
@@ -998,9 +998,9 @@ input:focus + .slider {
     box-shadow: 0 0 1px #000;
 }
 input:checked + .slider:before {
-    -webkit-transform: translateX(21px);
-    -ms-transform: translateX(21px);
-    transform: translateX(21px);
+    -webkit-transform: translateX(12px);
+    -ms-transform: translateX(12px);
+    transform: translateX(12px);
 }
   
 /* Rounded sliders */
