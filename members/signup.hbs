@@ -69,9 +69,10 @@
         <input id="input-email" class="gh-portal-input" type="email" name="email" placeholder="jamie@example.com" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Email" value="">
 
         <div class="row" style="margin-bottom: 32px; margin-top: 64px;">
+            <span>{{print_product}}</span>
             <span>MONTHLY</span>
             <label class="price-switch">
-                <input type="checkbox" onchange="onPlanSwitch(JSON.stringify({{@products}}))" id="yearly-checkbox">
+                <input type="checkbox" onchange="onPlanSwitch()" id="yearly-checkbox">
                 <span class="slider round"></span>
             </label>
             <span>YEARLY</span>
@@ -95,7 +96,9 @@
                                     <input type="button" value="+" class="button-plus" data-field="quantity">
                                 </div>
                             {{else}}
-                                <span>{{@price.currency}}</span><strong id="{{product.name}}">{{@price.monthly}}</strong> / month
+                                <span>{{@price.currency}}</span>
+                                <strong class="price-label" id="{{product.id}}" yearly="{{@price.yearly}}" monthly="{{@price.monthly}}" promo="{{product.discount}}">
+                                    {{@price.monthly}}</strong> / month
                             {{/match}}
                         </header>
                         <div class="checkout-plan-content">
@@ -120,9 +123,7 @@
                 {{/if}}
             {{/foreach}}
         </div>
-        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button" style="margin-top: 32px;"
-            {{!-- onclick="this.classList.toggle('button--loading')" --}}
-            >
+        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button" style="margin-top: 32px;">
             <span class="button__text">
                 Choose this plan
             </span>
@@ -141,21 +142,18 @@
 
 {{#contentFor "scripts"}}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="../assets/built/main.min.js"></script>
 <script type="text/javascript">
-    function onPlanSwitch(productss) {
-
+    function onPlanSwitch() {
         var yearlySelected = document.getElementById('yearly-checkbox').checked;
-        var products = JSON.stringify({{{@products}}});
-        console.log(products);
-        for (product in products) {
+        var price_labels = document.getElementsByClassName("price-label");
+        for (var i = 0; i < price_labels.length; i++) {
+            console.log("id: "+price_labels.item(i).getAttribute("id"));
+
             // change the price plan for each subscription product
-            // we name the subscription price text with the subscription name
-            // so we can access the component through the products array
             if (yearlySelected) {
-                document.getElementById(product.name).innerHTML = product.yearly_price;
+                price_labels.item(i).innerHTML = price_labels.item(i).getAttribute("yearly");
             } else {
-                document.getElementById(product.name).innerHTML = product.monthly_price;
+                price_labels.item(i).innerHTML = price_labels.item(i).getAttribute("monthly");
             }
         }
     }
