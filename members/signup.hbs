@@ -68,7 +68,7 @@
         </div>
         <input id="input-email" class="gh-portal-input" type="email" name="email" placeholder="jamie@example.com" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Email" value="">
 
-        <div class="row" style="margin-bottom: 32px;">
+        <div class="row" style="margin-bottom: 32px; margin-top: 64px;">
             <span>MONTHLY</span>
             <label class="price-switch">
                 <input type="checkbox" onchange="onPlanSwitch({{@products}})" id="yearly-checkbox">
@@ -120,7 +120,7 @@
                 {{/if}}
             {{/foreach}}
         </div>
-        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button">
+        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button" style="margin-top: 32px;">
                 Choose this plan</a>
     </div>
 
