@@ -1069,7 +1069,7 @@ input:checked + .slider:before {
     font-size: inherit;
     margin: 0;
     position: absolute;
-    right: calc(var(--card-padding) + var(--radio-border-width));
+    /* right: calc(var(--card-padding) + var(--radio-border-width)); */
     top: calc(var(--card-padding) + var(--radio-border-width));
 }
   
