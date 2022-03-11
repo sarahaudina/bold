@@ -71,7 +71,7 @@
         <div class="row" style="margin-bottom: 32px; margin-top: 64px;">
             <span>MONTHLY</span>
             <label class="price-switch">
-                <input type="checkbox" onchange="onPlanSwitch({{@products}})" id="yearly-checkbox">
+                <input type="checkbox" onchange="onPlanSwitch(JSON.stringify({{@products}}))" id="yearly-checkbox">
                 <span class="slider round"></span>
             </label>
             <span>YEARLY</span>
@@ -90,7 +90,7 @@
                                 <div class="input-group row">
                                     <input type="button" value="-" class="button-minus" data-field="quantity">
                                     <div class="checkout-currency">$</div>
-                                    <input type="number" step="1" max="" value="1" name="quantity" class="quantity-field">
+                                    <input id="custom-price" type="number" step="1" max="" value="1" name="quantity" class="quantity-field">
                                     / month
                                     <input type="button" value="+" class="button-plus" data-field="quantity">
                                 </div>
@@ -120,39 +120,52 @@
                 {{/if}}
             {{/foreach}}
         </div>
-        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button" style="margin-top: 32px;">
-                Choose this plan</a>
+        <a class="button rounded primary fit" href="javascript:" data-members-plan="Monthly" id="pay-button" style="margin-top: 32px;"
+            {{!-- onclick="this.classList.toggle('button--loading')" --}}
+            >
+            <span class="button__text">
+                Choose this plan
+            </span>
+        </a>
+        <p id="error">
+            <!-- error message will appear here -->
+        </p>
     </div>
 
 
 {{/if}}
 
 </div>
+</main>
+
 
 {{#contentFor "scripts"}}
-<script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="../assets/built/main.min.js"></script>
+<script type="text/javascript">
+    function onPlanSwitch(productss) {
 
-function onPlanSwitch(products) {
-    var yearlySelected = document.getElementById('#yearly-checkbox').checked;
-    for (price in products) {
-        // change the price plan for each subscription product
-        // we name the subscription price text with the subscription name
-        // so we can access the component through the products array
-        if (yearlySelected) {
-            document.getElementById('#'+product.name).innerHTML = product.monthly_price;
-        } else {
-            document.getElementById('#'+product.name).innerHTML = product.yearly_price;
+        var yearlySelected = document.getElementById('yearly-checkbox').checked;
+        var products = JSON.stringify({{{@products}}});
+        console.log(products);
+        for (product in products) {
+            // change the price plan for each subscription product
+            // we name the subscription price text with the subscription name
+            // so we can access the component through the products array
+            if (yearlySelected) {
+                document.getElementById(product.name).innerHTML = product.yearly_price;
+            } else {
+                document.getElementById(product.name).innerHTML = product.monthly_price;
+            }
         }
     }
-}
-
-$(document).ready(function () {
+    
     $("#pay-button").click(function () {
         document.getElementById("error").innerHTML = ""
-        
-        var plan = "monthly";
-        var price = document.querySelector(`#${plan}-buttons-container input[type="number"]`).value;
-        var email = document.getElementById("email").value;
+        var plan = document.getElementById("yearly-checkbox").checked ? "yearly" : "monthly";
+        var price = document.getElementById("custom-price").value;
+        var name = document.getElementById("input-name").value;
+        var email = document.getElementById("input-email").value;
         var currencyCode = "USD";
 
         // no email or no price : ask user to fill all
@@ -165,23 +178,24 @@ $(document).ready(function () {
             return;
         }
 
+        // show loading then send request to access stripe
+        document.getElementById("pay-button").classList.toggle('button--loading');
+
         fetch("https://pay-as-you-like-gh.herokuapp.com/api/get-stripe-session", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "*/*"
-            },
-            body: JSON.stringify({ price, email, plan, currencyCode })
-        }).then(function (result) {
-            console.log(result);
-            return result.json()
-        }).then(function (json) {  
-        // post payment redirection 
-            document.location = json.url
-        })
-    });
-});
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "*/*"
+                },
+                body: JSON.stringify({ price, email, plan, currencyCode }),
+            }).then(function (result) {
+                document.getElementById("pay-button").classList.toggle('button--loading');
+                console.log(result);
+                return result.json()
+            }).then(function (json) {  
+                // post payment redirection 
+                document.location = json.url
+            })
+        });
 </script>
 {{/contentFor}}
-
-</main>
