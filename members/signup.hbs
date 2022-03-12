@@ -149,7 +149,7 @@
     function setCurrencySign(){    
         var labels = document.getElementsByClassName("checkout-currency");
         var currencyCode = labels.item(0).getAttribute("currency-code");
-        var currencySign = getCurrencySymbol('en-IN', currencyCode); // new Intl.NumberFormat('en-IN', { style: 'currency', currency: currencyCode }).format(1).replace(/[0-9]/g, '');
+        var currencySign = getCurrencySymbol('en-IN', currencyCode); 
 
         for (var i = 0; i < labels.length; i++) {
             labels.item(i).innerHTML = currencySign;
@@ -222,7 +222,7 @@
         if (productName==='CUSTOM') {
             var custom_price = document.getElementById("custom-price").value;
             if (custom_price<price) {
-                document.getElementById("error").innerHTML = "Custom price can't be lower than $" + price + " :)";
+                document.getElementById("error").innerHTML = "Custom price can't be lower than " + getCurrencySymbol('en-IN', currencyCode) + price;
                 return;
             } else {
                 price = custom_price;
