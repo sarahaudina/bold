@@ -6,51 +6,10 @@
 {{!-- Custom Styles --}}
 <link rel="stylesheet" href="{{asset "css/screen.css"}}">
 
-{{#if @member.paid}}
+{{#if @member}}
 
-    {{!-- Logged in, paying member: Redirect home --}}
+    {{!-- Logged in: Redirect home --}}
     <script>window.location = '{{@site.url}}';</script>
-
-{{else if @member}}
-
-    {{!-- Logged in, not paying: Check out --}}
-    <div class="checkout-form">
-        <h1 class="checkout-title">Choose your subscription</h1>
-        <p>Unlock full access to {{@site.title}} and see the entire library of members-only content & updates</p>
-        <div class="checkout-box">
-            <div class="checkout-plan">
-                <header class="checkout-plan-header">
-                    <h3>Monthly</h3>
-                    <span>{{@price.currency}}</span><strong>{{price @product.monthly_price}}</strong> <span class="plan-label">/ month</span>
-                </header>
-                <div class="checkout-plan-content">
-                    <ul>
-                        <li>Full access to all private posts</li>
-                        <li>Regular updates with new content</li>
-                        <li>Support independent publishing</li>
-                        <li>Simple, secure card payment</li>
-                    </ul>
-                    <a class="button primary fit" href="javascript:" data-members-plan="Monthly" >Choose this plan</a>
-                </div>
-            </div>
-            <div class="checkout-plan">
-                <header class="checkout-plan-header">
-                    <h3>Yearly</h3>
-                    <span>{{@price.currency}}</span><strong>{{@price.yearly}}</strong> / year
-                </header>
-                <div class="checkout-plan-content">
-                    <ul>
-                        <li>Full access to all private posts</li>
-                        <li>Regular updates with new content</li>
-                        <li>Support independent publishing</li>
-                        <li>Simple, secure card payment</li>
-                        <li>One easy payment instead of 12!</li>
-                    </ul>
-                    <a class="button primary fit" href="javascript:" data-members-plan="Yearly">Choose this plan</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
 {{else}}
 
@@ -216,8 +175,8 @@
         var name = document.getElementById("input-name").value;
         var email = document.getElementById("input-email").value;
         var currencyCode = selected_product.getAttribute("currency");
-        var successUrl = "https://fueledbycoffee.ghost.io/";
-        var cancelUrl = "https://fueledbycoffee.ghost.io/signup/";
+        var successUrl = "https://www.google.com/"; //"https://fueledbycoffee.ghost.io/";
+        var cancelUrl = "https://www.google.com/"; //"https://fueledbycoffee.ghost.io/signup/";
         // check if value lower than minimal
         if (productName==='CUSTOM') {
             var custom_price = document.getElementById("custom-price").value;
