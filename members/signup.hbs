@@ -175,9 +175,9 @@
         var name = document.getElementById("input-name").value;
         var email = document.getElementById("input-email").value;
         var currencyCode = selected_product.getAttribute("currency");
-        var debug = true;
+        var debug = false;
         var hostName = debug ? "http://localhost:2368" : window.location.hostname;
-        var successUrl = hostName+"/?action=subscribe&success=true";
+        var successUrl = hostName+"/?stripe=success";
         var cancelUrl = hostName+"/signup";
         // check if value lower than minimal
         if (productName==='CUSTOM') {
