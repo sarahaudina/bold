@@ -175,8 +175,14 @@
         var name = document.getElementById("input-name").value;
         var email = document.getElementById("input-email").value;
         var currencyCode = selected_product.getAttribute("currency");
-        var debug = false;
-        var hostName = debug ? "http://localhost:2368" : window.location.hostname;
+        var hostName = window.location.hostname;
+        if (!hostName.includes('http:')){
+            if (window.location.protocol !== 'https:') {
+                hostName = 'http://'+hostName;
+            } else {
+                hostName = 'https://'+hostName;
+            }
+        }
         var successUrl = hostName+"/?stripe=success";
         var cancelUrl = hostName+"/signup";
         // check if value lower than minimal
