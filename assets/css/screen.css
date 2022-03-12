@@ -775,7 +775,7 @@ h6 {
 }
 
 .checkout-plan-header span {
-    font-size: 2.6rem;
+    font-size: 2rem;
     font-weight: 300;
 }
 
@@ -787,7 +787,7 @@ h6 {
 
 .checkout-currency {
     color: var(--darkgrey);
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 500;
 }
 
@@ -891,31 +891,6 @@ h6 {
     transition: 0.4s ease;
 
     appearance: none;
-}
-
-.custom-price{
-    margin:100px;
-}
-.custom-price.minus, .plus{
-    width:16px;
-    height:16px;
-    background:#fff;
-    border-radius:4px;
-    padding:8px 5px 8px 5px;
-    border:1px solid #ddd;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-}
-.custom-price.input{
-    height:34px;
-    width: 100px;
-    text-align: center;
-    font-size: 26px;
-    border:1px solid #ddd;
-    border-radius:4px;
-    display: inline-block;
-    vertical-align: middle;
 }
 
 .gh-portal-input-labelcontainer {

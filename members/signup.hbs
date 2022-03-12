@@ -88,15 +88,15 @@
                             <h3>{{product.name}}</h3>
                             {{#match @product.name "=" "CUSTOM"}}
                                 <div class="input-group row">
-                                    <input type="button" value="-" class="button-minus" data-field="quantity" style="background:#fff;">
-                                    <div class="checkout-currency" style="align-self: center;">$</div>
+                                    <input type="button" value="-" class="button-minus" data-field="quantity" style="background:#fff; padding=8px; margin=8px; width=20px;">
+                                    <div class="checkout-currency" style="align-self: center;" currency-code="{{@price.currency}}"></div>
                                     <input id="custom-price" type="number" step="1" max="" value="{{price @product.monthly_price.amount}}" name="quantity" class="quantity-field">
-                                    <span class="plan-label" style="font-size: 20px; align-self: center;">/ month</span>
+                                    <span class="plan-label" style="font-size: 18px; align-self: center;">/ month</span>
                                     <input type="button" value="+" class="button-plus" data-field="quantity" style="background:#fff;">
                                 </div>
                             {{else}}
                                 <div class="row">
-                                <div class="checkout-currency">$</div>
+                                <div class="checkout-currency" currency-code="{{@price.currency}}"></div>
                                 <strong class="price-label" yearly="{{price @product.yearly_price.amount}}" monthly="{{price @product.monthly_price.amount}}">
                                     {{price @product.monthly_price.amount}}</strong> <span class="plan-label" style="font-size: 20px;">/ month</span>
                                 </div>
@@ -144,6 +144,20 @@
 {{#contentFor "scripts"}}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script type="text/javascript">
+    const getCurrencySymbol = (locale, currency) => (0).toLocaleString(locale, { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\d/g, '').trim();
+    
+    function setCurrencySign(){    
+        var labels = document.getElementsByClassName("checkout-currency");
+        var currencyCode = labels.item(0).getAttribute("currency-code");
+        var currencySign = getCurrencySymbol('en-IN', currencyCode); // new Intl.NumberFormat('en-IN', { style: 'currency', currency: currencyCode }).format(1).replace(/[0-9]/g, '');
+
+        for (var i = 0; i < labels.length; i++) {
+            labels.item(i).innerHTML = currencySign;
+        }
+    }
+
+    document.onload = setCurrencySign();
+
     function onPlanSwitch() {
         var yearlySelected = document.getElementById('yearly-checkbox').checked;
         var price_labels = document.getElementsByClassName("price-label");
