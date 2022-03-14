@@ -89,7 +89,7 @@
                 {{/if}}
             {{/foreach}}
         </div>
-        <a class="button rounded primary fit" id="pay-button" style="margin-top: 100px; max-width:350px">
+        <a class="button rounded primary fit" id="pay-button" style="margin-top: 100px; max-width:350px" private-key="{{@custom.stripe_private_key}}">
             <span class="button__text">
                 SUBSCRIBE
             </span>
@@ -139,7 +139,6 @@
         // get min values
         var radios = document.getElementsByClassName("radio");
         for (var i = 0, length = radios.length; i < length; i++) {
-            console.log("get min value " + radios[i].getAttribute("product-name"));
             if (radios[i].getAttribute("is-custom")==='true') {
                 // set custom input to minamal price
                 if (yearlySelected) {
@@ -164,7 +163,12 @@
     
     $("#pay-button").click(function () {
         // features works only with this following stripe account
-        const stripePrivateKey="sk_test_51KYmQ1AvRMHFv37pvJZu5mAjnIkk8hNW2SUEpcDGlnAyDLQ7161GMVIgZBTEtsCxvOAgIxqpFDEctUE0BF1YJ3jl00dIyyknKT";
+        const stripePrivateKey=document.getElementById("pay-button").getAttribute("private-key");
+        if (stripePrivateKey=="") {
+            document.getElementById("error").innerHTML = "Checkout Failed ";
+            return;
+        }
+        
         // reset error
         document.getElementById("error").innerHTML = ""
         // get values
@@ -226,7 +230,6 @@
                 body: JSON.stringify({ price, email, plan, currencyCode, successUrl, cancelUrl, productName, stripePrivateKey }),
             }).then(function (result) {
                 document.getElementById("pay-button").classList.toggle('button--loading');
-                console.log(result);
                 return result.json()
             }).then(function (json) {  
                 // post payment redirection 
