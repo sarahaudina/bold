@@ -40,12 +40,18 @@
             {{#foreach @products as |product|}}
                 {{#if @product.monthly_price}}
                     <label class="checkout-plan">
-                        <input name="plan" class="radio" type="radio" checked yearly="{{price @product.yearly_price.amount}}" monthly="{{price @product.monthly_price.amount}}" product-name="{{@product.name}}" currency="{{@price.currency}}">
+                        {{#match @product.name "=" @custom.custom_price_tier_name}}
+                        <input name="plan" class="radio" type="radio" checked yearly="{{price @product.yearly_price.amount}}" monthly="{{price @product.monthly_price.amount}}" product-name="{{@product.name}}" currency="{{@price.currency}}"
+                            is-custom="true">
+                        {{else}}
+                        <input name="plan" class="radio" type="radio" checked yearly="{{price @product.yearly_price.amount}}" monthly="{{price @product.monthly_price.amount}}" product-name="{{@product.name}}" currency="{{@price.currency}}"
+                            is-custom="false">
+                        {{/match}}
                             <span class="plan-details">
 
                         <header class="checkout-plan-header" style="padding-top:50px;">
                             <h3>{{product.name}}</h3>
-                            {{#match @product.name "=" "CUSTOM"}}
+                            {{#match @product.name "=" @custom.custom_price_tier_name}}
                                 <div class="input-group row">
                                     <input type="button" value="-" class="button-minus" data-field="quantity" style="background:#fff; padding=8px; margin=8px; width=20px;">
                                     <div class="checkout-currency" style="align-self: center;" currency-code="{{@price.currency}}"></div>
@@ -134,7 +140,7 @@
         var radios = document.getElementsByClassName("radio");
         for (var i = 0, length = radios.length; i < length; i++) {
             console.log("get min value " + radios[i].getAttribute("product-name"));
-            if (radios[i].getAttribute("product-name")==='CUSTOM') {
+            if (radios[i].getAttribute("is-custom")==='true') {
                 // set custom input to minamal price
                 if (yearlySelected) {
                     document.getElementById("custom-price").value = radios[i].getAttribute("yearly");
@@ -169,6 +175,7 @@
                 selected_product = radios.item(i);
             }
         }
+        var isCustom = selected_product.getAttribute("is-custom");
         var productName = selected_product.getAttribute("product-name");
         var plan = document.getElementById("yearly-checkbox").checked ? "yearly" : "monthly";
         var price = plan==="yearly" ? selected_product.getAttribute("yearly") : selected_product.getAttribute("monthly");
@@ -186,7 +193,7 @@
         var successUrl = hostName+"/?stripe=success";
         var cancelUrl = hostName+"/signup";
         // check if value lower than minimal
-        if (productName==='CUSTOM') {
+        if (isCustom==='true') {
             var custom_price = document.getElementById("custom-price").value;
             if (custom_price<price) {
                 document.getElementById("error").innerHTML = "Custom price can't be lower than " + getCurrencySymbol('en-IN', currencyCode) + price;

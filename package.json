@@ -56,6 +56,14 @@
                 "options": ["Full", "Wide", "Small"],
                 "default": "Small",
                 "group": "post"
+            },
+            "stripe_private_key": {
+                "type": "text",
+                "default": ""
+            },
+            "custom_price_tier_name": {
+                "type": "text",
+                "default": "CUSTOM"
             }
         }
     }
